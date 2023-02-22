@@ -14,6 +14,20 @@ struct onebyte_data {
 	char data; // Here stores the one-byte data
 } devs[ONEBYTE_MINOR_MAX];
 
+/* This function is called when the device file is opened. */
+static int onebyte_open(struct inode *inode, struct file *file)
+{
+	struct onebyte_data *priv = NULL;
+	priv = container_of(inode->i_cdev, struct onebyte_data, cdev);
+	file->private_data = priv;
+	return 0;
+}
+
+/* This function is called when the device file is closed. */
+static int onebyte_close(struct inode *inode, struct file *file)
+{
+	return 0;
+}
 
 /* This function is called when the module is loaded. */
 static int onebyte_init(void) {}
