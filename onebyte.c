@@ -5,6 +5,16 @@
 
 MODULE_LICENSE("GPL");
 
+#define ONEBYTE_MAJOR 52
+#define ONEBYTE_MINOR_MAX 4
+
+/* This structure holds the device-specific information. */
+struct onebyte_data {
+	struct cdev cdev;
+	char data; // Here stores the one-byte data
+} devs[ONEBYTE_MINOR_MAX];
+
+
 /* This function is called when the module is loaded. */
 static int onebyte_init(void) {}
 
