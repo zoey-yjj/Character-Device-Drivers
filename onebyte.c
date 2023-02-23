@@ -41,7 +41,33 @@ struct file_operations onebyte_fops = { .read = onebyte_read,
 					.release = onebyte_close };
 
 /* This function is called when the module is loaded. */
-static int onebyte_init(void) {}
+static int onebyte_init(void)
+{
+	int i, err;
+
+	pr_info("onebyte: init\n");
+
+	/* register the device */
+	err = register_chrdev_region(MKDEV(ONEBYTE_MAJOR, 0), ONEBYTE_MINOR_MAX, "onebyte");
+	if (err < 0) {
+		return err;
+	}
+
+	/* initialize devs[i] */
+	for (i = 0; i < ONEBYTE_MINOR_MAX; i++) {
+		cdev_init(&devs[i].cdev, &onebyte_fops);
+		devs[i].cdev.owner = THIS_MODULE;
+		devs[i].cdev.ops = &onebyte_fops;
+		err = cdev_add(&devs[i].cdev, MKDEV(ONEBYTE_MAJOR, i), 1);
+		if (err) {
+			pr_err("Error %d adding onebyte%d", err, i);
+		}
+		// initialize the value to be -1
+		devs[i].data = -1;
+	}
+
+	return 0;
+}
 
 /* This function is called when the module is removed. */
 static void onebyte_exit(void) {}
