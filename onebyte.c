@@ -35,6 +35,11 @@ static ssize_t onebyte_read(struct file *file, char __user *ubuf, size_t size, l
 /* This function is called when someone tries to write into our device file. */
 static ssize_t onebyte_write(struct file *file, const char __user *ubuf, size_t size, loff_t *offset) {}
 
+struct file_operations onebyte_fops = { .read = onebyte_read,
+					.write = onebyte_write,
+					.open = onebyte_open,
+					.release = onebyte_close };
+
 /* This function is called when the module is loaded. */
 static int onebyte_init(void) {}
 
