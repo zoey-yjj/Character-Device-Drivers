@@ -29,6 +29,12 @@ static int onebyte_close(struct inode *inode, struct file *file)
 	return 0;
 }
 
+/* This function is called when someone tries to read from our device file. */
+static ssize_t onebyte_read(struct file *file, char __user *ubuf, size_t size, loff_t *offset) {}
+
+/* This function is called when someone tries to write into our device file. */
+static ssize_t onebyte_write(struct file *file, const char __user *ubuf, size_t size, loff_t *offset) {}
+
 /* This function is called when the module is loaded. */
 static int onebyte_init(void) {}
 
