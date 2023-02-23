@@ -70,7 +70,20 @@ static int onebyte_init(void)
 }
 
 /* This function is called when the module is removed. */
-static void onebyte_exit(void) {}
+static void onebyte_exit(void)
+{
+	int i;
+
+	pr_info("onebyte: exit\n");
+
+	/* release devs[i] fields */
+	for (i = 0; i < ONEBYTE_MINOR_MAX; i++) {
+		cdev_del(&devs[i].cdev);
+	}
+
+	/* unregister the device */
+	unregister_chrdev_region(MKDEV(ONEBYTE_MAJOR, 0), ONEBYTE_MINOR_MAX);
+}
 
 module_init(onebyte_init);
 module_exit(onebyte_exit);
