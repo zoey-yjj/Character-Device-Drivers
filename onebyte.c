@@ -30,7 +30,28 @@ static int onebyte_close(struct inode *inode, struct file *file)
 }
 
 /* This function is called when someone tries to read from our device file. */
-static ssize_t onebyte_read(struct file *file, char __user *ubuf, size_t size, loff_t *offset) {}
+static ssize_t onebyte_read(struct file *file, char __user *ubuf, size_t size, loff_t *offset) 
+{
+    int bytes_read = 0;
+
+	printk("read: start read function\n");
+
+	if (*offset == 0) {
+		if (size < sizeof(char)) {
+			return bytes_read;
+		}
+
+		if (copy_to_user(ubuf, &devs->data, sizeof(char))) {
+			return -EFAULT;
+		}
+		
+		printk("read: data value is %s\n", &devs->data);
+
+		(*offset)++;
+		bytes_read++;
+	}
+	return bytes_read;
+}
 
 /* This function is called when someone tries to write into our device file. */
 static ssize_t onebyte_write(struct file *file, const char __user *ubuf, size_t size, loff_t *offset) {}
