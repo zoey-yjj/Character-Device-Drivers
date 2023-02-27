@@ -30,6 +30,15 @@ int main(int argc, char *argv[])
     }
     printf("initial content of device is %d\n", buffer[0]);
 
+    // Write a byte to the device
+    buffer[0] = 'A';
+    ret = write(fd, buffer, 1);
+    if (ret == -1) {
+        fprintf(stderr, "Failed to write to %s: %s\n", DEVICE_FILE, strerror(errno));
+        close(fd);
+        exit(EXIT_FAILURE);
+    }
+
     // Close the device file
     close(fd);
 
