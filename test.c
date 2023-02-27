@@ -20,6 +20,16 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
+    // Read a byte from the device -- check initial value of the device
+    memset(buffer, 0, sizeof(buffer));
+    ret = read(fd, buffer, 1);
+    if (ret == -1) {
+        fprintf(stderr, "Failed to read from %s: %s\n", DEVICE_FILE, strerror(errno));
+        close(fd);
+        exit(EXIT_FAILURE);
+    }
+    printf("initial content of device is %d\n", buffer[0]);
+
     // Close the device file
     close(fd);
 
